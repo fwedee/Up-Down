@@ -1,5 +1,7 @@
 # Ignore venv
 .venv
+.env
+instance
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
