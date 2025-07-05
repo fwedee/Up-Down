@@ -3,8 +3,18 @@
 <head>
     <title>Flask App</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+    <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <h1>Welcome to My Flask App</h1>
+    <h2>File Upload</h2>
+    <form action="{{ url_for('file_upload.upload_file') }}" class="dropzone" id="my-awesome-dropzone">
+    </form>
+
+    <script>
+        let myDropzone = new Dropzone("#my-awesome-dropzone", {});
+    </script>
+
 </body>
 </html>
