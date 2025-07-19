@@ -4,8 +4,9 @@ const someText = document.getElementById('someText');
 const formText = document.getElementById('formText');
 
 textButton.addEventListener('click', function(){
-    let text = textInput.innerText;
-    sendText(text).then(r => updateTextField() )
+    let text = textInput.value;
+    // sendText(text).then(r => updateTextField() )
+    sendText(text)
 })
 
 async function sendText(text){
@@ -13,7 +14,6 @@ async function sendText(text){
     const data = {
         text: text
     };
-
     try{
         const response = await fetch(url, {
             method: 'POST',
@@ -25,32 +25,37 @@ async function sendText(text){
 
         const result = await response.json();
 
-        const newText = document.createElement('p');
-        newText.textContent = result.text
-        someText.appendChild(newText)
-        console.log(result)
-
+        // const newText = document.createElement('p');
+        // newText.textContent = result.text
+        // someText.appendChild(newText)
+        // console.log(result)
     }catch (error){
         console.error('Error', error);
     }
 }
 
-async function updateTextField(){
-
-    const newText = document.createElement('p');
-    newText.textContent = 'test'
-    someText.appendChild(newText)
+async function updateTextField(texts){
+    someText.innerHTML = texts.map(text =>`
+        <div className="file-item">
+            <p>${text.content}</p>
+        </div>
+    `).join('');
 }
 
- const socket = io();
+const socket = io();
 
     socket.on('connect', () => {
         console.log('Connected to WebSocket server');
         socket.emit('get_files');
+        socket.emit('get_texts')
     });
 
     socket.on('files_update', (data) => {
         updateFileList(data.files);
+    });
+
+    socket.on('texts_update', (data) =>{
+      updateTextField(data.texts)
     });
 
     function updateFileList(files) {

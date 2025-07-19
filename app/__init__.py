@@ -13,7 +13,7 @@ def create_app(config_class='config.DevelopmentConfig'):
    #config for file upload
     app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000 # max 16 megabytes
     app.config['UPLOAD_FOLDER'] = 'file_upload'
-    app.config['ALLOWED_EXTENSIONS'] = set(['png', 'jpg', 'jpeg', 'gif', 'txt', 'svg'])
+    app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif', 'txt', 'svg'}
 
     # Initialize extensions
     db.init_app(app)

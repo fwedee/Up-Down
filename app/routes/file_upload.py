@@ -5,6 +5,7 @@ from werkzeug.exceptions import RequestEntityTooLarge
 from app.services.user_service import create_file_reference
 from app.extensions import socketio
 from app.models.models import FileReference
+from app.routes.socket import send_files
 
 file_upload = Blueprint('file_upload', __name__)
 
@@ -24,13 +25,14 @@ def upload_file():
                     filename=os.path.splitext(filename)[0],
                     file_extension=extension[1:])
 
-                socketio.emit('files_update', {
-                    'files': [{
-                        'name': f"{file_ref.filename}.{file_ref.file_extension}",
-                        'url': f"/download/{file_ref.id}",
-                        'uploaded': file_ref.created_at.isoformat()
-                    }]
-                })
+                # socketio.emit('files_update', {
+                #     'files': [{
+                #         'name': f"{file_ref.filename}.{file_ref.file_extension}",
+                #         'url': f"/download/{file_ref.id}",
+                #         'uploaded': file_ref.created_at.isoformat()
+                #     }]
+                # })
+                send_files()
 
             except Exception as e:
                 return f'Error saving file: {str(e)}', 500
@@ -54,16 +56,8 @@ def download_file(file_id):
     file_ref = FileReference.query.get_or_404(file_id)
     absolute_path = os.path.abspath(file_ref.file_reference)
 
-    directory, filename = os.path.split(file_ref.file_reference)
-
     if not os.path.exists(file_ref.file_reference):
         abort(404, description="File not found on server")
-
-    print(f"DB Path: {file_ref.file_reference}")
-    print(f"Exists: {os.path.exists(file_ref.file_reference)}")
-    print(f"Absolute Path: {os.path.abspath(file_ref.file_reference)}")
-    print(f"Readable: {os.access(file_ref.file_reference, os.R_OK)}")
-    print(f"CWD: {os.getcwd()}")
 
     return send_file(
         absolute_path,
