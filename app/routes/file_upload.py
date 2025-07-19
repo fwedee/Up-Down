@@ -2,6 +2,7 @@ import os
 from flask import Blueprint, request, current_app
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
+from app.services.user_service import create_file_reference, get_recent_files
 
 file_upload = Blueprint('file_upload', __name__)
 
@@ -15,6 +16,11 @@ def upload_file():
             filename = secure_filename(uploaded_file.filename)
             try:
                 uploaded_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+                extension = os.path.splitext(filename)[1].lower()
+                new_file = create_file_reference(
+                    file_reference=os.path.join(current_app.config['UPLOAD_FOLDER'], filename),
+                    filename=os.path.splitext(filename)[0],
+                    file_extension=extension[1:])
             except Exception as e:
                 return f'Error saving file: {str(e)}', 500
         else:

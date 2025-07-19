@@ -4,6 +4,7 @@
     <title>Flask App</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+    <script src="{{ url_for('static', filename='updown.js') }}" defer></script>
     <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -11,6 +12,15 @@
     <h2>File Upload</h2>
     <form action="{{ url_for('file_upload.upload_file') }}" class="dropzone" id="my-awesome-dropzone">
     </form>
+
+    <form action="{{ url_for('text_upload.upload_text')}}" id="formText">
+       <input type="text" id="textInput" placeholder="Enter the text you want to send:">
+    </form>
+    <button id="textButton"></button>
+
+    <div id="someText">
+
+    </div>
 
     <script>
         let myDropzone = new Dropzone("#my-awesome-dropzone", {});
