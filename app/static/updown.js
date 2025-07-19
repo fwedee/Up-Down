@@ -41,3 +41,24 @@ async function updateTextField(){
     newText.textContent = 'test'
     someText.appendChild(newText)
 }
+
+ const socket = io();
+
+    socket.on('connect', () => {
+        console.log('Connected to WebSocket server');
+        socket.emit('get_files');
+    });
+
+    socket.on('files_update', (data) => {
+        updateFileList(data.files);
+    });
+
+    function updateFileList(files) {
+        const container = document.getElementById('files-container');
+        container.innerHTML = files.map(file => `
+            <div class="file-item">
+                <span>${file.name}</span>
+                <a href="${file.url}" class="btn">Download</a>
+            </div>
+        `).join('');
+    }

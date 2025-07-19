@@ -4,6 +4,7 @@
     <title>Flask App</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script src="{{ url_for('static', filename='updown.js') }}" defer></script>
     <link href="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone.css" rel="stylesheet" type="text/css" />
 </head>
@@ -19,8 +20,10 @@
     <button id="textButton"></button>
 
     <div id="someText">
-
     </div>
+
+    <div id="files-container"></div>
+
 
     <script>
         let myDropzone = new Dropzone("#my-awesome-dropzone", {});
